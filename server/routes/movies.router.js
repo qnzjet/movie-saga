@@ -15,3 +15,5 @@ router.get('/', (req, res) => {
             console.log('problem with movies.router get:', error);
         })
 })
+
+module.exports = router;

@@ -3,9 +3,15 @@ import { connect } from 'react-redux';
 
 class Home extends Component{
 
+    //on load, get movies from db
+    componentDidMount=()=>{
+        this.props.dispatch({ type: "GET_MOVIES" });
+    }
+
     render(){
         return(
            <>
+           {JSON.stringify(this.props.stateMovies)}
            </>
         );
     }
