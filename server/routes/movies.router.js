@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
+//need pool to access db- already set up in base project
 const pool = require('../modules/pool');
-const { Query } = require("pg");
+
 
 //get request to get array of all movie objects from db
 router.get('/', (req, res) => {
@@ -18,14 +19,14 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    //using the id given, get details from one movie from database.
+    //using the id given, get just one movie info object from database.
     //one query for general info, one complex query for genres
     //bundle into one object!
-    const query = `SELECT * FROM movies WHERE id=$1`;
-    pool.query(query, [req.params.id])
+    const generalQuery = `SELECT * FROM movies WHERE id=$1`;
+    pool.query(generalQuery, [req.params.id])
         .then(response => {
             console.log('response from first query:', response);
-            let details= response.rows[0];
+            let movieData= response.rows[0];
             let genreQuery = `SELECT "genres"."name" FROM "movies"
             JOIN "movies_genres" ON "movies"."id" = "movies_genres"."movies_id"
             JOIN "genres" ON "movies_genres"."genres_id" = "genres"."id"
@@ -37,13 +38,25 @@ router.get('/:id', (req, res) => {
                     for (object of genreResult){
                         genreArray.push(object.name);
                     }
-                    details.genres=genreArray;
-                    res.send(details);
+                    movieData.genres=genreArray;
+                    res.send(movieData);
                 })
         })
         .catch(error => {
             console.log('problem with movies.router get:', error);
         })
 })
+
+router.put('/:id', (req, res) => {
+    const generalQuery = `UPDATE "movies" SET "title" = $1, "description" = $2 WHERE "id" = $3`;
+    pool.query(generalQuery, [req.body.title, req.body.description, req.params.id])
+        .then(response => {
+            res.sendStatus(200);
+        })
+        .catch(error => {
+            console.log('problem with movies.router get:', error);
+        })
+})
+
 
 module.exports = router;

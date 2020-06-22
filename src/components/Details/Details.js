@@ -9,37 +9,38 @@ class Details extends Component {
 
     componentDidMount=()=> {
         //get the movie id from the passed props/params, GET movie data,
-        this.getMovie(this.props.details.movieId);
+        this.getMovie(this.props.match.params.movieId);
     }
 
     getMovie = (movieId) => {
         this.props.dispatch({ type: "GET_DETAILS", payload: movieId });
     }
 
-    edit=()=> {
-        //go to edit for current movie
-        this.props.history.push(`/edit/${this.props.details.movieId}`)
+    goToEdit=()=> {
+        //go to edit view for current movie
+        this.props.history.push(`/edit/${this.props.match.params.movieId}`)
 
     }
 
     render() {
         return (
             <div>
-                <section>
-                        {JSON.stringify(this.props.details)}
-                        <h2>{this.props.details.title}</h2>
-                        <img src={this.props.details.poster} alt={`movie poster for ${this.props.selectedMovie.title}`}/>
+                <section className="details">
+                    <article className="details">
+                        <h2>{this.props.selectedMovie.title}</h2>
+                        <img src={this.props.selectedMovie.poster} alt={`movie poster for ${this.props.selectedMovie.title}`}/>
                         {
-                            this.props.movieSelected.genres ?
-                                <ul>{this.props.details.genres.map((genreString)=>
-                                    <li key={genreString}>{genreString} </li>
+                            this.props.selectedMovie.genres ?
+                                <ul>{this.props.selectedMovie.genres.map((genreString)=>
+                                    <li className="genre" key={genreString}>{genreString} </li>
                                 )}</ul>
                                 :
                                 <p></p>
                         }
-                        <p>{this.props.details.description}</p>
-                    <button onClick={this.edit}>Edit Movie </button>
-                    <button onClick={this.backHome}>Home</button>
+                        <p>{this.props.selectedMovie.description}</p>
+                    </article>
+                    <button onClick={this.goToEdit}>Edit Movie Information</button>
+                    <button onClick={this.backHome}>BACK TO DATABASE</button>
                 </section>
             </div>
         );
@@ -47,6 +48,6 @@ class Details extends Component {
 }
 
 const putReduxStateOnProps = (reduxState) => ({
-    details: reduxState.details
+    selectedMovie: reduxState.movie
 })
 export default connect(putReduxStateOnProps)(Details);
