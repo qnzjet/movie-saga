@@ -39,8 +39,8 @@ class Details extends Component {
                         }
                         <p>{this.props.selectedMovie.description}</p>
                     </article>
-                    <button onClick={this.goToEdit}>Edit Movie Information</button>
-                    <button onClick={this.backHome}>BACK TO DATABASE</button>
+                    <button onClick={this.goToEdit}>Edit Movie</button>
+                    <button onClick={this.backHome}>HOME</button>
                 </section>
             </div>
         );
