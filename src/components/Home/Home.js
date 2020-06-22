@@ -7,12 +7,29 @@ class Home extends Component{
     componentDidMount=()=>{
         this.props.dispatch({ type: "GET_MOVIES" });
     }
+    goToDetails=(id)=>{
+        //go to details view for movie clicked
+        this.props.history.push(`/details/${id}`);
+    }
 
-    render(){
-        return(
-           <>
-           {JSON.stringify(this.props.stateMovies)}
-           </>
+    render() {
+        return (
+            <section>
+                <p>click on movie to view movie details</p>
+                <div>
+                    {this.props.stateMovies.map((movie)=>
+                        <article key={movie.id}>
+                            <h2>{movie.title}</h2>
+                            <button 
+                                onClick={()=>
+                                    this.goToDetails(movie.id)}
+                                title={`see details about ${movie.title}`}>
+                                <img src={movie.poster} alt={`movie poster for ${movie.title}`}/>
+                            </button>
+                        </article>
+                    )}
+                </div>
+            </section>
         );
     }
 }
